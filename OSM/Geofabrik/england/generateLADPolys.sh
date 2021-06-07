@@ -11,6 +11,9 @@ mkdir ladbuildings
 
 rm splitLADs.sh
 
+# command example: https://blog.geofabrik.de/?p=75
+
+
 areas=`ls ladpolys | grep LAD_E | wc -l`
 echo -n 'osmosis --read-pbf $1 --tee'$areas' ' >> splitLADs.sh
 
@@ -27,7 +30,7 @@ do
   #echo $lad
   if [[ $lad == "LAD_E"* ]]
   then 
-    echo -n "--bp $poly --write-pbf ladbuildings/"$lad"_buildings_"$ts".osm.pbf " >> splitLADs.sh
+    echo -n "--bp file=$poly --write-pbf ladbuildings/"$lad"_buildings_"$ts".osm.pbf " >> splitLADs.sh
   fi
   #i=$(($i + 1))
 done
