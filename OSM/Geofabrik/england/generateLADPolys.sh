@@ -18,14 +18,15 @@ echo "# split buildings between lads" >> splitLADs.sh
 #areas=`ls ladpolys | grep LAD_E | wc -l`
 #echo -n 'osmosis --read-pbf $1 --tee'$areas' ' >> splitLADs.sh
 
-#i=0
+i=0
 for poly in "ladpolys"/*
 do
   #data is piped into 4 following processes only: to parallise with less cores, should repeat osmosis command? does it handle --tee 382 ?
-  m=`echo "$i % 10" | bc`
-  if [[ $m -eq 0 ]]
+  if (( $i % 10 == 0 ))
   then
-     echo "osmosis --read-pbf $1 --tee 10 " >> splitLADs.sh
+     echo "" >> splitLADs.sh
+     echo "" >> splitLADs.sh
+     echo -n 'osmosis --read-pbf $1 --tee 10 ' >> splitLADs.sh
   fi
   ladpref="$( cut -d '.' -f 1 <<< "$poly" )"
   lad="$( cut -d '/' -f 2 <<< "$ladpref" )"
@@ -33,8 +34,8 @@ do
   if [[ $lad == "LAD_E"* ]]
   then 
     echo -n "--bp file=$poly --write-pbf ladbuildings/"$lad"_buildings_"$ts".osm.pbf " >> splitLADs.sh
+    i=$(($i + 1))
   fi
-  i=$(($i + 1))
 done
 
 
