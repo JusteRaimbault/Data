@@ -10,21 +10,23 @@ ts=$1
 mkdir ladbuildings
 
 rm splitLADs.sh
+echo "# split buildings between lads" >> splitLADs.sh
 
 # command example: https://blog.geofabrik.de/?p=75
 
 
-areas=`ls ladpolys | grep LAD_E | wc -l`
-echo -n 'osmosis --read-pbf $1 --tee'$areas' ' >> splitLADs.sh
+#areas=`ls ladpolys | grep LAD_E | wc -l`
+#echo -n 'osmosis --read-pbf $1 --tee'$areas' ' >> splitLADs.sh
 
 #i=0
 for poly in "ladpolys"/*
 do
   #data is piped into 4 following processes only: to parallise with less cores, should repeat osmosis command? does it handle --tee 382 ?
-  #if (( $i % 4 == 0 ))
-  #then
-  #   echo -n "--tee 4 " >> splitLADs.sh
-  #fi
+  m=`echo "$i % 10" | bc`
+  if [[ $m -eq 0 ]]
+  then
+     echo "osmosis --read-pbf $1 --tee 10 " >> splitLADs.sh
+  fi
   ladpref="$( cut -d '.' -f 1 <<< "$poly" )"
   lad="$( cut -d '/' -f 2 <<< "$ladpref" )"
   #echo $lad
@@ -32,7 +34,7 @@ do
   then 
     echo -n "--bp file=$poly --write-pbf ladbuildings/"$lad"_buildings_"$ts".osm.pbf " >> splitLADs.sh
   fi
-  #i=$(($i + 1))
+  i=$(($i + 1))
 done
 
 
