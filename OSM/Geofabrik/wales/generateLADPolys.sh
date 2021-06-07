@@ -29,12 +29,13 @@ do
      echo "" >> splitLADs.sh
      echo -n 'osmosis --read-pbf $1 --tee 10 ' >> splitLADs.sh
   fi
-  ladpref="$( cut -d '.' -f 1 <<< "$poly" )"
-  lad="$( cut -d '/' -f 2 <<< "$ladpref" )"
+  #ladpref="$( cut -d '.' -f 1 <<< "$poly" )"
+  #lad="$( cut -d '/' -f 2 <<< "$ladpref" )"
+  lad="$( cut -d '.' -f 1 <<< "$poly" )"
   #echo $lad
   if [[ $lad == "LAD_W"* ]]
   then 
-    echo -n "--bp file=$poly --write-pbf ladbuildings/"$lad"_buildings_"$ts".osm.pbf " >> splitLADs.sh
+    echo -n "--bp file=ladpolys/$poly --write-pbf ladbuildings/"$lad"_buildings_"$ts".osm.pbf " >> splitLADs.sh
     i=$(($i + 1))
   fi
 done
